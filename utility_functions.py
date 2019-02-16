@@ -230,30 +230,13 @@ def sqrt_method(A : np.array, b : np.array):
 
 
 def sqrt_inv_matrix(A : np.array):
-    temp_A = np.copy(A)
-
     n = len(A)
-    S = sqrt_matrix_transform(temp_A)
-
-    S_T = S.T
-
     E = np.diag(np.ones(n))
     inv_A = np.zeros((n, n))
 
     for i in range(n):
-        y = np.zeros(n)
-        y[0] = E[i][0] / S_T[0][0]
-        for k in range(1, n):
-            s = sum(S_T[k][s] * y[s] for s in range(k))
-            y[k] = (E[i][k] - s) / S_T[k][k]
-
-        x = np.zeros(n)
-        x[n - 1] = y[n - 1] / S[n - 1][n - 1]
-        for k in range(n - 2, -1, -1):
-            s = sum(S[k][p] * x[p] for p in range(k + 1, n))
-            x[k] = (y[k] - s) / S[k][k]  
-
+        x = sqrt_method(A, E[i])
         inv_A[i] = x
-    
-    return inv_A
+
+    return inv_A.T
 
