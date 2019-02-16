@@ -183,6 +183,25 @@ def make_system_symmetrical(A : np.array, b : np.array):
     return new_A, new_b 
 
 
+def sqrt_matrix_transform(A : np.array):
+    n = len(A)
+    S = np.zeros((n ,n))
+
+    S[0][0] = math.sqrt(A[0][0])
+
+    for j in range(1, n):
+        S[0][j] = A[0][j] / S[0][0]
+
+    for i in range(1 , n):
+        s = sum(S[p][i] ** 2 for p in range(i))
+        S[i][i] = math.sqrt(A[i][i] - s)
+        for j in range(i + 1, n):
+            s = sum(S[p][i] * S[p][j] for p in range(i))
+            S[i][j] = (A[i][j] - s) / S[i][i]
+
+    return S
+
+
 def sqrt_method(A : np.array, b : np.array):
     temp_A = np.copy(A)
     temp_b = np.copy(b)
@@ -191,19 +210,7 @@ def sqrt_method(A : np.array, b : np.array):
         temp_A, temp_b = make_system_symmetrical(temp_A, temp_b)
 
     n = len(A)
-    S = np.zeros((n ,n))
-
-    S[0][0] = math.sqrt(temp_A[0][0])
-
-    for j in range(1, n):
-        S[0][j] = temp_A[0][j] / S[0][0]
-
-    for i in range(1 , n):
-        s = sum(S[p][i] ** 2 for p in range(i))
-        S[i][i] = math.sqrt(temp_A[i][i] - s)
-        for j in range(i + 1, n):
-            s = sum(S[p][i] * S[p][j] for p in range(i))
-            S[i][j] = (temp_A[i][j] - s) / S[i][i]
+    S = sqrt_matrix_transform(temp_A)
 
     S_T = S.T
 
@@ -226,19 +233,7 @@ def sqrt_inv_matrix(A : np.array):
     temp_A = np.copy(A)
 
     n = len(A)
-    S = np.zeros((n ,n))
-
-    S[0][0] = math.sqrt(temp_A[0][0])
-
-    for j in range(1, n):
-        S[0][j] = temp_A[0][j] / S[0][0]
-
-    for i in range(1 , n):
-        s = sum(S[p][i] ** 2 for p in range(i))
-        S[i][i] = math.sqrt(temp_A[i][i] - s)
-        for j in range(i + 1, n):
-            s = sum(S[p][i] * S[p][j] for p in range(i))
-            S[i][j] = (temp_A[i][j] - s) / S[i][i]
+    S = sqrt_matrix_transform(temp_A)
 
     S_T = S.T
 
