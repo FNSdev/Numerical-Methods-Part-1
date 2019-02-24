@@ -11,7 +11,7 @@ def main():
     b = np.array([0.454, 0.371, 0.465, 0.822], dtype='float')
 
 
-    print(f'SQRT method : {sqrt_method(A, b)}')
+    print(f'SQRT method solve : {sqrt_method(A, b)}')
     print(f'numpy solve : {np.linalg.solve(A, b)}')
 
     print(f'SQRT method inv matrix :\n {sqrt_inv_matrix(A)}')

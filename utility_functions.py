@@ -128,7 +128,7 @@ def simple_iter_data_transform(A : np.array, b : np.array):
     return (B, temp_b)
 
 #TODO check value of k
-def simple_iter(A : np.array, b : np.array, error = 0.01):
+def simple_iter(A : np.array, b : np.array, error = 0.001):
     B, c = simple_iter_data_transform(A, b)
 
     simply_iterable, matrix_norm = is_simply_iterable(B)
@@ -140,7 +140,7 @@ def simple_iter(A : np.array, b : np.array, error = 0.01):
 
     B_norm = matrix_norm(B)
     k = math.ceil(math.log(error * (1 - B_norm) / vector_norm(x1 - x0)) / math.log(B_norm))
-
+    print(k)
     x = x1
 
     for i in range(k - 1):
@@ -149,7 +149,7 @@ def simple_iter(A : np.array, b : np.array, error = 0.01):
     return x
 
 
-def seidel(A : np.array, b : np.array, error = 0.01):
+def seidel(A : np.array, b : np.array, error = 0.001):
     B, c = simple_iter_data_transform(A, b)
     seidel_iterable, matrix_norm = is_seidel_iterable(B)
 
@@ -166,9 +166,10 @@ def seidel(A : np.array, b : np.array, error = 0.01):
             s1 = sum(B[i][j] * x_k_new[j] for j in range(i))
             s2 = sum(B[i][j] * x_k[j] for j in range(i, n))
             x_k_new[i] = s1 + s2 + c[i]
-        convergense = math.sqrt(sum((x_k_new[i] - x_k[i]) ** 2 for i in range(n))) <= error
+        #convergense = math.sqrt(sum((x_k_new[i] - x_k[i]) ** 2 for i in range(n))) <= error
+        convergense = abs(vector_norm(x_k_new) - vector_norm(x_k)) <= error
         x_k = x_k_new
-
+        print('iter')
     return x_k
 
 
@@ -212,8 +213,15 @@ def sqrt_method(A : np.array, b : np.array):
     n = len(A)
     S = sqrt_matrix_transform(temp_A)
 
-    S_T = S.T
+    det = 1
+    for i in range(n):
+        det *= S[i][i] ** 2
 
+    print(f'SQRT method |A| = {det}')
+    print(f'numpy |A| = {np.linalg.det(temp_A)}')
+
+    S_T = S.T
+    
     y = np.zeros(n)
     y[0] = temp_b[0] / S_T[0][0]
     for k in range(1, n):
@@ -240,3 +248,55 @@ def sqrt_inv_matrix(A : np.array):
 
     return inv_A.T
 
+
+def eigen_values_and_vectors(A : np.array, error=0.01, debug=False):
+    if not is_matrix_symmetrical(A):
+        raise ValueError("Matrix is not symmetrical")
+    
+    def max(A : np.array):
+        n = len(A)
+        max_el = 0
+        k = 0
+        l = 0
+        for i in range(n):
+            for j in range(i + 1, n):
+                if abs(A[i][j]) > max_el:
+                    max_el = abs(A[i][j])
+                    k = i
+                    l = j
+        return max_el, k, l
+
+    n = len(A)
+    L = np.diag(np.ones(n))
+    temp_A = np.copy(A)
+
+    convergense = False
+    while not convergense:
+        U = np.diag(np.ones(n))
+        a_max, i, j = max(temp_A)
+
+        angle = 0.5 * math.atan2(2 * a_max, (temp_A[i][i] - temp_A[j][j]))
+        U[i][i] = math.cos(angle)
+        U[j][j] = math.cos(angle)
+        U[i][j] = - math.sin(angle)
+        U[j][i] = math.sin(angle)
+
+        prev_A = np.copy(temp_A)
+        temp_A = np.dot(np.dot(U.T, temp_A), U)    
+       
+        L = np.dot(L, U)
+
+        convergense = True
+        for i in range(n):
+            if abs(temp_A[i][i] - prev_A[i][i]) > error:
+                convergense = False
+                break
+        if debug:
+            print('iteration')
+  
+    if debug:
+        print("DEBUG: checking Ax = λx")
+        for i in range(len(L)):
+            print(f"{A.dot(L.T[i])} = {temp_A[i][i] * L.T[i]}")
+
+    return [temp_A[i][i] for i in range(n)], L
