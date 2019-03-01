@@ -11,7 +11,7 @@ def main():
     A = np.dot(A.T, A)
 
     w, v = np.linalg.eig(A)
-    values, vectors = eigen_values_and_vectors(A, debug=True)
+    values, vectors = eigen_values_and_vectors(A, debug=False)
     print(f'eigen values: {values}')
     print(f'numpy eigen values: {w}')
     print('eigen vectors:')

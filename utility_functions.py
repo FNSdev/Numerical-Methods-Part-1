@@ -293,7 +293,7 @@ def eigen_values_and_vectors(A : np.array, error=0.01, debug=False):
                 break
         if debug:
             print('iteration')
-  
+     
     if debug:
         print("DEBUG: checking Ax = λx")
         for i in range(len(L)):
