@@ -140,7 +140,7 @@ def simple_iter(A : np.array, b : np.array, error = 0.001):
 
     B_norm = matrix_norm(B)
     k = math.ceil(math.log(error * (1 - B_norm) / vector_norm(x1 - x0)) / math.log(B_norm))
-    print(k)
+    print(f'k = {k}')
     x = x1
 
     for i in range(k - 1):
@@ -169,7 +169,7 @@ def seidel(A : np.array, b : np.array, error = 0.001):
         #convergense = math.sqrt(sum((x_k_new[i] - x_k[i]) ** 2 for i in range(n))) <= error
         convergense = abs(vector_norm(x_k_new) - vector_norm(x_k)) <= error
         x_k = x_k_new
-        print('iter')
+        print('seidel iter')
     return x_k
 
 

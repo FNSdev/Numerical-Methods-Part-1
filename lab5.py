@@ -196,11 +196,11 @@ def modified_newton_method(expression_1, expression_2, function_1, function_2, x
     inv_j = np.linalg.inv(jacobian(expression_1, expression_2, x_0, y_0))
 
     if not np.linalg.det(inv_j):
-            raise ValueError('Jacobian equals to zero')
+        raise ValueError('Jacobian equals to zero')
 
     while True:
         if DEBUG:
-            print('newton method iteration')
+            print('modified newton method iteration')
       
         next_x = prev_x - inv_j[0].dot(np.array([function_1(prev_x, prev_y), function_2(prev_x, prev_y)]))
         next_y = prev_y - inv_j[1].dot(np.array([function_1(prev_x, prev_y), function_2(prev_x, prev_y)]))
