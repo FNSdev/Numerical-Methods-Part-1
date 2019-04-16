@@ -79,16 +79,16 @@ def targent_method(function, a, b, expression, error):
 print(f'targent method answer: {targent_method(function, a, b, expression, error)}')
 
 
-#expression_1 = sp.tan(x*y + 1) - x ** 2
-#expression_2 = 3 * x**2 + 2 * y ** 2 - 1
+expression_1 = sp.tan(x*y + 1) - x ** 2
+expression_2 = 3 * x**2 + 2 * y ** 2 - 1
 
-#function_1 = sp.lambdify(x, expression_1, 'numpy')
-#function_2 = sp.lambdify(x, expression_2, 'numpy')
+function_1 = sp.lambdify(x, expression_1, 'numpy')
+function_2 = sp.lambdify(x, expression_2, 'numpy')
 
-#a_x = -1
-#b_x = 1
-#a_y = -1
-#b_y = 1
+a_x = -10
+b_x = 10
+a_y = -10
+b_y = 10
 
 #plot_1 = sp.plotting.plot_implicit(sp.Eq(expression_1, 0), (x, a_x, b_x), (y, a_y, b_y))
 #plot_2 = sp.plotting.plot_implicit(sp.Eq(expression_2, 0), (x, a_x, b_x), (y, a_y, b_y))
@@ -114,8 +114,8 @@ plot_1.extend(plot_2)
 
 plot_1.show()
 
-x_0 = 0.3
-y_0 = 0.3
+x_0 = -0.6
+y_0 = -0.8
 
 
 def jacobian(expression_1, expression_2, x_0, y_0):
