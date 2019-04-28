@@ -10,7 +10,7 @@ def main():
                   [0.438, 0.326, 0.483, 4.229]], dtype='float')
     b = np.array([0.454, 0.371, 0.465, 0.822], dtype='float')
     print(f'simple iterations : {simple_iter(A, b)}')
-    print(f'zeidel : {seidel(A, b)}')
+    print(f'seidel : {seidel(A, b)}')
     print(f'numpy solve : {np.linalg.solve(A, b)}')
 
 main()
